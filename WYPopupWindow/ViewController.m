@@ -86,7 +86,6 @@ static NSArray *dataArray() {
     /****** 传入popupWindow要放到的父视图 及popupWindow的坐标（调起关键方法） ******/
     [[WYPopupWindow shareInstance] showPopWindowInView:parentView showAtLocation:CGRectMake(x, y, width, height)];
     
-    
     // 记录展开视图的点击视图，用来解决重复点击该视图的问题
     [WYPopupWindow shareInstance].touchUpView = touchView;
     // 动画展开的起始点，默认是中心
@@ -94,7 +93,7 @@ static NSArray *dataArray() {
     // popupWindow的背景颜色，默认是透明的
     [WYPopupWindow shareInstance].windowBackgoundColor = RandomColor;
     // 动画持续时间，默认0.2
-    [WYPopupWindow shareInstance].animationDuration = 0.5;
+    [WYPopupWindow shareInstance].animationDuration = 0.3;
     // 是否能响应内部点击事件，默认支持
     [WYPopupWindow shareInstance].touchable = YES;
     // 是否能响应外部点击事件，默认支持
@@ -107,21 +106,27 @@ static NSArray *dataArray() {
     [WYPopupWindow shareInstance].cornerRadius = 10;
     // popupWindow蒙版颜色，默认是透明的
     [WYPopupWindow shareInstance].maskColor = [UIColor colorWithWhite:0 alpha:0.1];
-    // 关闭popupWindow
-//    [[WYPopupWindow shareInstance] closePopupWindow];
     
     /****** popupWindow上可以添加任何视图 ******/
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-    label.text = [dataArray() objectAtIndex:touchView.tag];
-    label.textAlignment = NSTextAlignmentCenter;
-    [[WYPopupWindow shareInstance].contentView addSubview:label];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(0, 0, width, height);
+    [button setTitle:[dataArray() objectAtIndex:touchView.tag] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(touchButton) forControlEvents:UIControlEventTouchUpInside];
+    [[WYPopupWindow shareInstance] addCustomView:button];
+}
+
+- (void)touchButton
+{
+    NSLog(@"点击了popupWindow上的按钮");
+    
+    // 关闭popupWindow
+    [[WYPopupWindow shareInstance] closePopupWindow];
 }
 
 - (void)push
 {
     [self.navigationController pushViewController:[UIViewController new] animated:YES];
 }
-
 
 - (void)tap:(UITapGestureRecognizer *)tap
 {

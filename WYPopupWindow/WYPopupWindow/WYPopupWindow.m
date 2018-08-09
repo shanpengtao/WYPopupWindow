@@ -8,7 +8,10 @@
 
 #import "WYPopupWindow.h"
 
-@interface WYPopupWindow () <CAAnimationDelegate>
+@interface WYPopupWindow ()
+
+/** 自定义视图所在的父视图 */
+@property (nonatomic, strong) UIView *contentView;
 
 /** 蒙版 */
 @property (nonatomic, strong) UIView *maskView;
@@ -46,8 +49,6 @@
  */
 - (void)showPopWindowInView:(UIView *)parentView showAtLocation:(CGRect)frame
 {
-    [self clearViewAndData];
-    
     [[UIApplication sharedApplication].keyWindow addSubview:self.maskView];
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     
@@ -61,6 +62,13 @@
     self.contentView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     
     [self showWindow:YES];
+}
+
+- (void)addCustomView:(UIView *)customView
+{
+    [self clearViewAndData];
+    
+    [self.contentView addSubview:customView];
 }
 
 // 调整坐标到window内部
@@ -99,12 +107,12 @@
 // 赋值默认参数
 - (void)initDefaultParams
 {
+    self.windowBackgoundColor = [UIColor clearColor];
     self.backgroundColor = [UIColor clearColor];
     self.animationAnchorPoint = CGPointMake(0.5, 0.5);
     self.animationDuration = 0.2;
     self.outsideTouchable = YES;
     self.touchable = YES;
-    self.windowBackgoundColor = [UIColor clearColor];
     self.cornerRadius = 4;
     self.layer.masksToBounds = NO;
     self.layer.shadowOpacity = 0;
@@ -121,9 +129,6 @@
             }
         }
     }
-    
-    // 重置视图和数据
-    [self initDefaultParams];
 }
 
 /**
@@ -209,22 +214,12 @@
         group.removedOnCompletion = YES;
         group.repeatCount = 1;
         group.fillMode = kCAFillModeForwards;
-        group.delegate = self;
         [group setAnimations:@[scaleAnimation,showViewAnn]];
         [contentLayer addAnimation:group forKey:@"animationOpacity"];
         self.alpha = 0;
         
         // 重置
         [self initDefaultParams];
-    }
-}
-
-#pragma mark - CAAnimationDelegate
-
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
-{
-    if (flag) {
-
     }
 }
 
@@ -317,7 +312,7 @@
 
 - (void)setWindowBackgoundColor:(UIColor *)windowBackgoundColor
 {
-    self.contentView.backgroundColor = windowBackgoundColor;
+    self.contentView.backgroundColor = _windowBackgoundColor = windowBackgoundColor;
 }
 
 - (void)setIsShowShadow:(BOOL)isShowShadow

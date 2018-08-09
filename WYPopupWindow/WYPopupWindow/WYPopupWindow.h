@@ -10,9 +10,6 @@
 
 @interface WYPopupWindow : UIView
 
-/** 内容视图 */
-@property (nonatomic, strong) UIView *contentView;
-
 /** 展开视图的按钮，控制展开视图过程中点击按钮的事件 */
 @property (nonatomic, weak) UIView *touchUpView;
 
@@ -46,6 +43,9 @@
 /** 是否处于展示中，只读 */
 @property (nonatomic, assign, readonly) BOOL isDisplay;
 
+/**
+ *  单例实例
+ */
 + (instancetype)shareInstance;
 
 /**
@@ -53,9 +53,15 @@
  *
  *  @param parentView   父视图
  *  @param frame        父视图的位置大小
- *
  */
 - (void)showPopWindowInView:(UIView *)parentView showAtLocation:(CGRect)frame;
+
+/**
+ *  添加自定义视图
+ *
+ *  @param customView   自定义视图
+ */
+- (void)addCustomView:(UIView *)customView;
 
 /**
  *  关闭当前popupWindow
