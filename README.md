@@ -35,4 +35,4 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     label.text = [dataArray() objectAtIndex:touchView.tag];
     label.textAlignment = NSTextAlignmentCenter;
-    [[WYPopupWindow shareInstance] addCustomView:button];
+    [[WYPopupWindow shareInstance] addCustomView:label];
