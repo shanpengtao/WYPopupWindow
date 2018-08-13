@@ -99,7 +99,7 @@ static NSArray *dataArray() {
     // 是否能响应外部点击事件，默认支持
     [WYPopupWindow shareInstance].outsideTouchable = YES;
     // 是否显示阴影，默认显示
-//    [WYPopupWindow shareInstance].isShowShadow = YES;
+    [WYPopupWindow shareInstance].isShowShadow = YES;
     // 阴影颜色，默认显示grayColor
     [WYPopupWindow shareInstance].shadowColor = [UIColor redColor];
     // 圆角弧度，默认4
